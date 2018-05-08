@@ -29,8 +29,12 @@ void Global_GPIO_init(void)
 	GPIOB_PDOR=0x00000000; // Valor inicial
 }
 
-void GPIO_Write(unsigned char followed)
+void GPIO_Write_PB(unsigned char followed)
 {
 	GPIOB_PDOR=followed;
 }
 
+void GPIO_Write_PC(unsigned char followed)
+{
+	GPIOC_PDOR=followed;
+}
