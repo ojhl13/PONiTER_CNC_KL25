@@ -6,6 +6,8 @@
  */
 #include "motor.h"
 #include "GPIO.h"
+#include "types.h"
+
 
 #define LEFT 1
 #define RIGTH 0
@@ -13,8 +15,12 @@
 #define DOWN 0 
 #define MOTORX 1
 #define MOTORY 0
+#define MMSTEPRELATION 5 // steps necesarios para avanzar un milimetro
 
-
+unsigned char GetDirection(unsigned char ActualPos, unsigned char NewPos );
+unsigned char diference(unsigned char ActualPos, unsigned char NewPos );
+void moveMotor( unsigned char steps ,unsigned char direction, unsigned char motor );
+unsigned char convertMM2Steps(unsigned char mm);
 
 static unsigned char actualpositionX;
 static unsigned char actualpositionY;
@@ -48,7 +54,10 @@ void start(void)
 	
 	
 }
-
+unsigned char convertMM2Steps(unsigned char mm)
+{
+	return (mm/MMSTEPRELATION);
+}
 unsigned char diference(unsigned char ActualPos, unsigned char NewPos )
 {
 	unsigned char data2ret;

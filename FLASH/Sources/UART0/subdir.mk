@@ -30,7 +30,7 @@ OBJS_OS_FORMAT += \
 # Each subdirectory must supply rules for building sources it contributes
 Sources/UART0/UART.o: ../Sources/UART0/UART.c
 	@echo 'Building file: $<'
-	@echo 'Executing target #3 $<'
+	@echo 'Executing target #4 $<'
 	@echo 'Invoking: ARM Ltd Windows GCC C Compiler'
 	"$(ARMSourceryDirEnv)/arm-none-eabi-gcc" "$<" @"Sources/UART0/UART.args" -MMD -MP -MF"$(@:%.o=%.d)" -o"Sources/UART0/UART.o"
 	@echo 'Finished building: $<'

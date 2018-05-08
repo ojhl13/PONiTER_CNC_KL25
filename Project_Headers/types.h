@@ -8,6 +8,6 @@
 #ifndef TYPES_H_
 #define TYPES_H_
 
-typedef unsigned char u_int8
+typedef unsigned char u_int8;
 
 #endif /* TYPES_H_ */

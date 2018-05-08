@@ -30,7 +30,7 @@ OBJS_OS_FORMAT += \
 # Each subdirectory must supply rules for building sources it contributes
 Sources/TIMER0/TIMER.o: ../Sources/TIMER0/TIMER.c
 	@echo 'Building file: $<'
-	@echo 'Executing target #4 $<'
+	@echo 'Executing target #5 $<'
 	@echo 'Invoking: ARM Ltd Windows GCC C Compiler'
 	"$(ARMSourceryDirEnv)/arm-none-eabi-gcc" "$<" @"Sources/TIMER0/TIMER.args" -MMD -MP -MF"$(@:%.o=%.d)" -o"Sources/TIMER0/TIMER.o"
 	@echo 'Finished building: $<'

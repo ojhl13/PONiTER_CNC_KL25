@@ -30,7 +30,7 @@ OBJS_OS_FORMAT += \
 # Each subdirectory must supply rules for building sources it contributes
 Sources/GPIO/GPIO.o: ../Sources/GPIO/GPIO.c
 	@echo 'Building file: $<'
-	@echo 'Executing target #6 $<'
+	@echo 'Executing target #7 $<'
 	@echo 'Invoking: ARM Ltd Windows GCC C Compiler'
 	"$(ARMSourceryDirEnv)/arm-none-eabi-gcc" "$<" @"Sources/GPIO/GPIO.args" -MMD -MP -MF"$(@:%.o=%.d)" -o"Sources/GPIO/GPIO.o"
 	@echo 'Finished building: $<'

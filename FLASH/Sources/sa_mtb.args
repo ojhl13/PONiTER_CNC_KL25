@@ -4,8 +4,8 @@
 -g3
 -gdwarf-2
 -gstrict-dwarf
--I"C:/Users/oscar/Downloads/proyectovictoria/Practica4/Project_Headers"
--I"C:/Users/oscar/Downloads/proyectovictoria/Practica4/Project_Settings/Startup_Code"
+-I"C:/Users/oscar/Downloads/proyectovictoria/CNC/Project_Headers"
+-I"C:/Users/oscar/Downloads/proyectovictoria/CNC/Project_Settings/Startup_Code"
 -I"C:/Freescale/CW MCU v10.6/MCU/ARM_GCC_Support/ewl/EWL_C/include"
 -I"C:/Freescale/CW MCU v10.6/MCU/ARM_GCC_Support/ewl/EWL_Runtime/include"
 -O0
