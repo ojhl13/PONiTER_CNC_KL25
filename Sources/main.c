@@ -17,7 +17,7 @@
 int main(void)
 {	
 
-	
+	unsigned char index;
 	//inicializar módulos
 	motorinit();
 	Global_UART0_init();
@@ -31,10 +31,14 @@ int main(void)
 	NVIC_ISER = (1<<12) + (1<<28) + (1<<15) + (1<<17); //(Hab interrupciones LPTMR y ADC0)
 	
 	Receiver();
-	
+	start();
 	do{
 		
-			
+			if(getFlag()){
+				index=getindex();
+				GoToNewPos(GetX(index),GetY(index));
+				DoneMessage();
+			}
 		
 	}
 	while(1);

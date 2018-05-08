@@ -24,6 +24,10 @@ void DoneMessage(void);
 void OverTmp(void);
 unsigned char getOn(void);
 void UART0_IRQHandler(void);
+unsigned char GetX(unsigned char index);
+unsigned char GetY(unsigned char index);
+unsigned char getFlag(void);
+unsigned char getindex (void);
 
 
 #endif /* UART_H_ */

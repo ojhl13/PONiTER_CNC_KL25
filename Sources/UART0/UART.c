@@ -80,15 +80,26 @@ unsigned char getindex (void)
 {
 	return index;
 }
-unsigned char GetX(unsigned char index){
+unsigned char GetX(unsigned char index)
+{
 	unsigned char* ASCIIarray ;
 	unsigned char  coordinateX;
+	coordinateX=0;
 	ASCIIarray = &tmp[(i-7)%N];
 	coordinateX= converASCIII(ASCIIarray);
 	
-	
 	return coordinateX;
 }
+unsigned char GetY(unsigned char index){
+	unsigned char* ASCIIarray ;
+	unsigned char  coordinateY;
+	coordinateY=0;
+	ASCIIarray = &tmp[(i-3)%N];
+	coordinateY= converASCIII(ASCIIarray);
+	
+	return coordinateY;
+}
+
 
 void UART0_IRQHandler(void)
 {
