@@ -6,6 +6,7 @@
  */
 #include "motor.h"
 #include "GPIO.h"
+#include "LPTMR.h"
 #include "types.h"
 
 
@@ -15,7 +16,7 @@
 #define DOWN 0 
 #define MOTORX 1
 #define MOTORY 0
-#define MMSTEPRELATION 5 // steps necesarios para avanzar un milimetro
+#define MMSTEPRELATION (200/36) // steps necesarios para avanzar un milimetro
 #define NOMOVE 255
 
 unsigned char GetDirection(unsigned char, unsigned char, unsigned char);
@@ -33,31 +34,32 @@ void motorinit(void)
 	i=0;
 	j=0;
 	Global_GPIO_init();
+	LPTMR_Init();
 	actualpositionX=0;
 	actualpositionY=0;
 }
 void start(void)
 {
-	
+
 	u_int8 steps;/* variable que indicara cuantos pasos se requiere mover para llegar la inicio*/
 	steps=0;
-	
+
 	steps = diference(actualpositionX,0);
 	steps = convertMM2Steps(steps);
 	moveMotor(steps,LEFT,MOTORX);//mover en X
-	
-	
+
+
 	steps = diference(actualpositionY,0);
 	steps = convertMM2Steps(steps);
 	moveMotor(steps,UP,MOTORY);//mover en Y
-		
-	
-	
-	
+
+
+
+
 }
 unsigned char convertMM2Steps(unsigned char mm)
 {
-	return (mm/MMSTEPRELATION);
+	return (mm*MMSTEPRELATION);
 }
 unsigned char diference(unsigned char ActualPos, unsigned char NewPos )
 {
@@ -75,37 +77,46 @@ unsigned char diference(unsigned char ActualPos, unsigned char NewPos )
 	{
 		data2ret = ActualPos - NewPos;
 	}
-		
+
 	return data2ret;
 }
 
 void moveMotor( unsigned char steps ,unsigned char direction, unsigned char motor )
 {
-	
+
 	while( steps--){
-		if(motor == MOTORX)
+		if(LPTMR_getFlag()==1)
 		{
-			if(direction == LEFT)
+			LPTMR_set_CMR(1000);
+
+			LPTMR_setFlag();
+
+			if(motor == MOTORX)
 			{
-				GPIO_Write_PB(secuencia[(i++)%8]);
+				if(direction == LEFT)
+				{
+
+
+					GPIO_Write_PB(secuencia[(i++)%8]);
+				}
+				else
+				{
+					GPIO_Write_PB(secuencia[(i--)%8]);
+				}
 			}
 			else
 			{
-				GPIO_Write_PB(secuencia[(i--)%8]);
+				if(direction == UP)
+				{
+					GPIO_Write_PC(secuencia[(i++)%8]);
+				}
+				else
+				{
+					GPIO_Write_PC(secuencia[(i--)%8]);
+				}
 			}
+
 		}
-		else
-		{
-			if(direction == UP)
-			{
-				GPIO_Write_PC(secuencia[(i++)%8]);
-			}
-			else
-			{
-				GPIO_Write_PC(secuencia[(i--)%8]);
-			}
-		}
-	
 	}
 
 }
@@ -123,23 +134,23 @@ unsigned char GetDirection(unsigned char ActualPos, unsigned char NewPos, unsign
 		{
 			direction = DOWN;
 		}
-		
+
 	}
-	
+
 	else if(ActualPos == NewPos)
 	{
 		direction = NOMOVE;
 	}
 	else
 	{
-			if(motor == MOTORY)
-			{
-				direction = UP;
-			}
-			else
-			{
-				direction = LEFT;
-			}
+		if(motor == MOTORY)
+		{
+			direction = UP;
+		}
+		else
+		{
+			direction = LEFT;
+		}
 	}
 	return direction;
 }
@@ -150,17 +161,19 @@ void GoToNewPos(unsigned char coorX, unsigned char coorY )
 	steps=0;
 	dir=0;
 	steps = diference(actualpositionY,coorY);
-	steps = convertMM2Steps(steps);
-	dir= GetDirection(actualpositionY,coorY,MOTORY);
-	moveMotor(steps,dir,MOTORY);//mover en Y
-		
+	if( steps != NOMOVE){
+		steps = convertMM2Steps(steps);
+		dir= GetDirection(actualpositionY,coorY,MOTORY);
+		moveMotor(steps,dir,MOTORY);//mover en Y
+	}
 	steps = diference(actualpositionX,coorX);
-	steps = convertMM2Steps(steps);
-	dir= GetDirection(actualpositionX,coorX,MOTORX);
-	moveMotor(steps,dir,MOTORX);//mover en X
-		
-		
-	
-			
+	if( steps != NOMOVE){
+		steps = convertMM2Steps(steps);
+		dir= GetDirection(actualpositionX,coorX,MOTORX);
+		moveMotor(steps,dir,MOTORX);//mover en X
+	}
+
+
+
 }
 

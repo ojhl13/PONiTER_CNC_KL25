@@ -8,24 +8,22 @@
 
 
 #include "derivative.h" /* include peripheral declarations */
-#include "TIMER.h"
+#include "motor.h"
 #include "UART.h"
-#include "LPTMR.h"
+
 
 
 
 int main(void)
 {	
-	//secuencia a seguir
-	unsigned char secuencia[8]={0x0000000E,0x0000000C,0x0000000D,0x00000009,0x0000000B,0x00000003,0x00000007,0x00000006};
-	unsigned char i=0;
+
 	
 	//inicializar módulos
 	motorinit();
 	Global_UART0_init();
 	UART0_init();
-	LPTMR_Init();
-	TPM_Init();
+
+
 	
 	
 	//Interripciones globales hab
@@ -36,11 +34,7 @@ int main(void)
 	
 	do{
 		
-			if(LPTMR_getFlag()==1)
-			{
-				LPTMR_set_CMR(1000);
-				LPTMR_setFlag();
-			}
+			
 		
 	}
 	while(1);
