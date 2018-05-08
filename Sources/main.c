@@ -39,7 +39,6 @@ int main(void)
 			if(LPTMR_getFlag()==1)
 			{
 				LPTMR_set_CMR(1000);
-				GPIO_Write(secuencia[(i++)%8]);
 				LPTMR_setFlag();
 			}
 		

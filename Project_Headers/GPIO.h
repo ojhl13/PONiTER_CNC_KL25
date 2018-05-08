@@ -10,6 +10,7 @@
 
 void Global_GPIO_init(void);
 
-void GPIO_Write(unsigned char);
+void GPIO_Write_PB(unsigned char);
+
 
 #endif /* GPIO_H_ */

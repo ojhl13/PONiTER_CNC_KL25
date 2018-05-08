@@ -16,11 +16,12 @@
 #define MOTORX 1
 #define MOTORY 0
 #define MMSTEPRELATION 5 // steps necesarios para avanzar un milimetro
+#define NOMOVE 255
 
-unsigned char GetDirection(unsigned char ActualPos, unsigned char NewPos );
-unsigned char diference(unsigned char ActualPos, unsigned char NewPos );
-void moveMotor( unsigned char steps ,unsigned char direction, unsigned char motor );
-unsigned char convertMM2Steps(unsigned char mm);
+unsigned char GetDirection(unsigned char, unsigned char, unsigned char);
+unsigned char diference(unsigned char, unsigned char );
+void moveMotor( unsigned char,unsigned char, unsigned char );
+unsigned char convertMM2Steps(unsigned char);
 
 static unsigned char actualpositionX;
 static unsigned char actualpositionY;
@@ -66,6 +67,10 @@ unsigned char diference(unsigned char ActualPos, unsigned char NewPos )
 	{
 		data2ret = NewPos - ActualPos;
 	}
+	else if(ActualPos == NewPos)
+	{
+		data2ret = NOMOVE;
+	}
 	else
 	{
 		data2ret = ActualPos - NewPos;
@@ -104,14 +109,39 @@ void moveMotor( unsigned char steps ,unsigned char direction, unsigned char moto
 	}
 
 }
-unsigned char GetDirection(unsigned char ActualPos, unsigned char NewPos )
+unsigned char GetDirection(unsigned char ActualPos, unsigned char NewPos, unsigned char motor)
 {
 	unsigned char direction;
 	direction =0;
 	if( ActualPos < NewPos)
 	{
+		if(motor == MOTORX)
+		{
+			direction = RIGTH;
+		}
+		else
+		{
+			direction = DOWN;
+		}
 		
 	}
+	
+	else if(ActualPos == NewPos)
+	{
+		direction = NOMOVE;
+	}
+	else
+	{
+			if(motor == MOTORY)
+			{
+				direction = UP;
+			}
+			else
+			{
+				direction = LEFT;
+			}
+	}
+	return direction;
 }
 void GoToNewPos(unsigned char coorX, unsigned char coorY )
 {
@@ -121,12 +151,12 @@ void GoToNewPos(unsigned char coorX, unsigned char coorY )
 	dir=0;
 	steps = diference(actualpositionY,coorY);
 	steps = convertMM2Steps(steps);
-	dir= GetDirection(actualpositionY,coorY);
+	dir= GetDirection(actualpositionY,coorY,MOTORY);
 	moveMotor(steps,dir,MOTORY);//mover en Y
 		
 	steps = diference(actualpositionX,coorX);
 	steps = convertMM2Steps(steps);
-	dir= GetDirection(actualpositionX,coorX);
+	dir= GetDirection(actualpositionX,coorX,MOTORX);
 	moveMotor(steps,dir,MOTORX);//mover en X
 		
 		
