@@ -27,15 +27,17 @@ void Global_UART0_init(void)
 	SIM_SCGC5|=(1<<9); //CLK PORTA TX y RX
 	PORTA_PCR1|=(2<<8); //PTA1 ALT2 UART0 TX
 	PORTA_PCR2|=(2<<8); //PTA2 ATL2 UART0 RX
-	NVIC_ICPR=(1<<12); //borrar banderas pendientes
-	NVIC_ISER=(1<<12); //habilitar interrupciones de UART0
+	NVIC_ICPR|=(1<<12); //borrar banderas pendientes
+	NVIC_ISER|=(1<<12); //habilitar interrupciones de UART0
+	MCG_C1|=(1<<1);	//b0: hab. MCGIRCLK.
+
 }
 
 void UART0_init(void)
 {
 	flag =0;
 	UART0_BDL=137;
-	UART0_C2=(3<<2); //Enable Transmit and Recieve
+	UART0_C2=(3<<2)+(1<<5); //hab Tx y Rx, b5:hab. interrupcion.
 
 }
 
@@ -50,8 +52,8 @@ void DoneMessage(void)
 {
 	unsigned char i=0;
 	do{
-	do{}while(!(UART0_S1&(1<<7)));
-	UART0_D=done[i++];
+		do{}while(!(UART0_S1&(1<<7)));
+		UART0_D=done[i++];
 	}while(done[i]!=0);
 }
 
@@ -87,7 +89,7 @@ unsigned char GetX(unsigned char index)
 	coordinateX=0;
 	ASCIIarray = &tmp[(i-7)%N];
 	coordinateX= converASCIII(ASCIIarray);
-	
+
 	return coordinateX;
 }
 unsigned char GetY(unsigned char index){
@@ -96,7 +98,7 @@ unsigned char GetY(unsigned char index){
 	coordinateY=0;
 	ASCIIarray = &tmp[(i-3)%N];
 	coordinateY= converASCIII(ASCIIarray);
-	
+
 	return coordinateY;
 }
 
@@ -104,24 +106,27 @@ unsigned char GetY(unsigned char index){
 void UART0_IRQHandler(void)
 {
 	//ignorar primera interrupcion
-	if(dummie==0)
+	if(UART0_S1&(1<<5))	//Evaluamos que la interrupcion provenga de Rx
 	{
-		dummie=1;
-	}
-	else
-	{
-		tmp[(i++)] = UART0_D;	
-		if(i==32){
-			i=0;
-		}
-		if(')' == UART0_D)
+		if(dummie==0)
 		{
-			setFlag();
-			setindex();
+			dummie=1;
 		}
-		
+		else
+		{
+			tmp[(i++)] = UART0_D;	
+			if(i==32){
+				i=0;
+			}
+			if(')' == UART0_D)
+			{
+				setFlag();
+				setindex();
+			}
+
+		}
+		Receiver();
+
+
 	}
-	Receiver();
-
-
 }
